@@ -167,8 +167,7 @@ func SendMessageR(message Prometheus, rwxurl, rddurl, rfsurl, rphone, remail, rg
 				<h5>开始时间：` + At + `</h5>
 				<h5>结束时间：` + Et + `</h5>
 				<h5>故障主机IP：` + RMessage.Labels.Instance + `</h5>
-				<h3>` + RMessage.Annotations.Description + `</h3>
-				<img src=` + Rlogourl + ` />`
+				<h3>` + RMessage.Annotations.Description + `</h3>`
 		} else {
 			titleend = "故障告警信息"
 			models.AlertsFromCounter.WithLabelValues("prometheus").Add(1)
@@ -185,8 +184,7 @@ func SendMessageR(message Prometheus, rwxurl, rddurl, rfsurl, rphone, remail, rg
 				<h5>开始时间：` + At + `</h5>
 				<h5>结束时间：` + Et + `</h5>
 				<h5>故障主机IP：` + RMessage.Labels.Instance + `</h5>
-				<h3>` + RMessage.Annotations.Description + `</h3>
-				<img src=` + Logourl + ` />`
+				<h3>` + RMessage.Annotations.Description + `</h3>`
 		}
 		//发送消息到钉钉
 		if rddurl == "" && RMessage.Annotations.Ddurl == "" {
@@ -304,6 +302,7 @@ func SendMessageR(message Prometheus, rwxurl, rddurl, rfsurl, rphone, remail, rg
 				phone := GetUserPhone(1)
 				PostTXmessage(MobileMessage, phone, logsign)
 				PostHWmessage(MobileMessage, phone, logsign)
+				Postiflymessage(MobileMessage, phone, logsign)
 				PostALYmessage(MobileMessage, phone, logsign)
 				Post7MOORmessage(MobileMessage, phone, logsign)
 				PostBDYmessage(MobileMessage, phone, logsign)
@@ -311,6 +310,7 @@ func SendMessageR(message Prometheus, rwxurl, rddurl, rfsurl, rphone, remail, rg
 				if rphone != "" {
 					PostTXmessage(MobileMessage, rphone, logsign)
 					PostHWmessage(MobileMessage, rphone, logsign)
+					Postiflymessage(MobileMessage, rphone, logsign)
 					PostALYmessage(MobileMessage, rphone, logsign)
 					Post7MOORmessage(MobileMessage, rphone, logsign)
 					PostBDYmessage(MobileMessage, rphone, logsign)
@@ -318,6 +318,7 @@ func SendMessageR(message Prometheus, rwxurl, rddurl, rfsurl, rphone, remail, rg
 				if RMessage.Annotations.Mobile != "" {
 					PostTXmessage(MobileMessage, RMessage.Annotations.Mobile, logsign)
 					PostHWmessage(MobileMessage, RMessage.Annotations.Mobile, logsign)
+					Postiflymessage(MobileMessage, RMessage.Annotations.Mobile, logsign)
 					PostALYmessage(MobileMessage, RMessage.Annotations.Mobile, logsign)
 					Post7MOORmessage(MobileMessage, RMessage.Annotations.Mobile, logsign)
 					PostBDYmessage(MobileMessage, RMessage.Annotations.Mobile, logsign)

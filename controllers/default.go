@@ -17,6 +17,7 @@ type DashboardJson struct {
 	Email           int `json:"email"`
 	Feishu          int `json:"feishu"`
 	Hwdx            int `json:"hwdx"`
+	Iflydx          int `json:"iflydx"`
 	Rlydx           int `json:"rlydx"`
 	Ruliu           int `json:"ruliu"`
 	Txdx            int `json:"txdx"`
@@ -45,7 +46,7 @@ type MainController struct {
 	beego.Controller
 }
 
-//main page
+// main page
 func (c *MainController) Get() {
 	if !CheckAccount(c.Ctx) {
 		c.Redirect("/login", 302)

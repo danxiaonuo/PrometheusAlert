@@ -79,7 +79,7 @@ func GetAccessToken(logsign string) (string, error) {
 	}
 	client := &http.Client{Transport: tr}
 	//res, err := client.Post("https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal", "application/json; charset=utf-8", b)
-	res, err := http.NewRequest("POST", "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal", b)
+	res, err := http.NewRequest("POST", "https://open.xfchat.iflytek.com/open-apis/auth/v3/tenant_access_token/internal", b)
 	if err != nil {
 		logs.Error(logsign, "[feishuapp]", err.Error())
 		return "", err
@@ -198,7 +198,7 @@ func PostToFeiShuApp(title, text, receiveIds, logsign string) string {
 				}
 			}
 			client := &http.Client{Transport: tr}
-			FSUrl := fmt.Sprintf("https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=%s", ReceiveType)
+			FSUrl := fmt.Sprintf("https://open.xfchat.iflytek.com/open-apis/im/v1/messages?receive_id_type=%s", ReceiveType)
 			req, err := http.NewRequest("POST", FSUrl, b)
 			if err != nil {
 				logs.Error(logsign, "[feishuapp]", title+": "+err.Error())

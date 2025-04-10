@@ -131,7 +131,7 @@ func (c *PrometheusAlertController) PrometheusAlert() {
 	pMsg.GroupId = checkURL(agMap["groupid"], c.Input().Get("groupid"), beego.AppConfig.String("BDRL_ID"))
 
 	pMsg.Phone = checkURL(agMap["phone"], c.Input().Get("phone"))
-	if pMsg.Phone == "" && (pMsg.Type == "txdx" || pMsg.Type == "hwdx" || pMsg.Type == "bddx" || pMsg.Type == "alydx" || pMsg.Type == "txdh" || pMsg.Type == "alydh" || pMsg.Type == "rlydh" || pMsg.Type == "7moordx" || pMsg.Type == "7moordh") {
+	if pMsg.Phone == "" && (pMsg.Type == "txdx" || pMsg.Type == "hwdx" || pMsg.Type == "iflydx" || pMsg.Type == "bddx" || pMsg.Type == "alydx" || pMsg.Type == "txdh" || pMsg.Type == "alydh" || pMsg.Type == "rlydh" || pMsg.Type == "7moordx" || pMsg.Type == "7moordh") {
 		pMsg.Phone = GetUserPhone(1)
 	}
 
@@ -303,7 +303,7 @@ func AlertRouterSet(xalert map[string]interface{}, PMsg PrometheusAlertMsg, Tpl 
 			case "rl":
 				PMsg.GroupId = router_value.UrlOrPhone
 			//短信、电话
-			case "txdx", "hwdx", "bddx", "alydx", "txdh", "alydh", "rlydh", "7moordx", "7moordh":
+			case "txdx", "hwdx", "iflydx", "bddx", "alydx", "txdh", "alydh", "rlydh", "7moordx", "7moordh":
 				PMsg.Phone = router_value.UrlOrPhone
 			//异常参数
 			default:
@@ -499,6 +499,9 @@ func SendMessagePrometheusAlert(message string, pmsg *PrometheusAlertMsg, logsig
 	//华为云短信
 	case "hwdx":
 		ReturnMsg += PostHWmessage(message, pmsg.Phone, logsign)
+	//讯飞短信
+	case "iflydx":
+		ReturnMsg += Postiflymessage(message, pmsg.Phone, logsign)
 	//百度云短信
 	case "bddx":
 		ReturnMsg += PostBDYmessage(message, pmsg.Phone, logsign)

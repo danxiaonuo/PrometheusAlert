@@ -18,7 +18,7 @@ type ZabbixMessage struct {
 	ZabbixType    string `json:"zabbixtype"`    //告警类型
 }
 
-//zabbix告警消息入口
+// zabbix告警消息入口
 func (c *ZabbixController) ZabbixAlert() {
 	alert := ZabbixMessage{}
 	logsign := "[" + LogsSign() + "]"
@@ -34,6 +34,15 @@ func SendMessageZabbix(message ZabbixMessage, logsign string) string {
 	models.AlertsFromCounter.WithLabelValues("zabbix").Add(1)
 	ChartsJson.Zabbix += 1
 	switch message.ZabbixType {
+	//邮箱渠道
+	case "em":
+		if message.ZabbixTarget == "" {
+			message.ZabbixTarget = beego.AppConfig.String("Default_emails")
+		}
+		ret = SendEmail(message.ZabbixMessage, message.ZabbixTarget, "", logsign)
+	//Webhook渠道
+	case "webhook":
+		ret = PostToWebhook(message.ZabbixMessage, message.ZabbixTarget, "", logsign)
 	//微信渠道
 	case "wx":
 		if message.ZabbixTarget == "" {
@@ -64,6 +73,12 @@ func SendMessageZabbix(message ZabbixMessage, logsign string) string {
 			message.ZabbixTarget = GetUserPhone(1)
 		}
 		ret = ret + PostHWmessage(message.ZabbixMessage, message.ZabbixTarget, logsign)
+	//讯飞短信
+	case "iflydx":
+		if message.ZabbixTarget == "" {
+			message.ZabbixTarget = GetUserPhone(1)
+		}
+		ret = ret + Postiflymessage(message.ZabbixMessage, message.ZabbixTarget, logsign)
 	//百度云短信
 	case "bddx":
 		if message.ZabbixTarget == "" {
